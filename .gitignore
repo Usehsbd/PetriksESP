@@ -1,41 +1,45 @@
-# Compiled Lua sources
-luac.out
+-- FunÃ§Ã£o para calcular a distÃ¢ncia entre dois pontos no espaÃ§o 3D
+local function calcularDistancia(ponto1, ponto2)
+    return (ponto1 - ponto2).magnitude
+end
 
-# luarocks build files
-*.src.rock
-*.zip
-*.tar.gz
+-- FunÃ§Ã£o para exibir a posiÃ§Ã£o e a distÃ¢ncia dos jogadores
+local function mostrarPosicaoJogadores()
+    local jogadorLocal = game.Players.LocalPlayer
+    local posicaoLocal = jogadorLocal.Character.HumanoidRootPart.Position
+    
+    for _, jogador in ipairs(game.Players:GetPlayers()) do
+        if jogador ~= jogadorLocal and jogador.Character and jogador.Character:FindFirstChild("HumanoidRootPart") then
+            local posicaoJogador = jogador.Character.HumanoidRootPart.Position
+            local distancia = calcularDistancia(posicaoLocal, posicaoJogador)
+            
+            -- Verificar se o jogador possui uma tag de distÃ¢ncia
+            local tag = jogador.Character:FindFirstChild("DistanceTag")
+            if not tag then
+                -- Criar uma nova tag se nÃ£o existir
+                tag = Instance.new("BillboardGui")
+                tag.Name = "DistanceTag"
+                tag.Parent = jogador.Character
+                tag.Size = UDim2.new(0, 100, 0, 50)
+                tag.StudsOffset = Vector3.new(0, 3, 0) -- Ajuste a altura da tag
+                tag.AlwaysOnTop = true
+                
+                -- Texto da tag com a distÃ¢ncia e o nome do jogador
+                local texto = Instance.new("TextLabel")
+                texto.Parent = tag
+                texto.Size = UDim2.new(1, 0, 1, 0)
+                texto.TextColor3 = Color3.fromRGB(0, 255, 0) -- Verde
+                texto.TextScaled = true
+                texto.TextXAlignment = Enum.TextXAlignment.Center
+            end
+            
+            -- Atualizar o texto da tag com a distÃ¢ncia e o nome do jogador
+            tag.TextLabel.Text = jogador.Name .. "\n" .. string.format("%.2f metros", distancia)
+        end
+    end
+end
 
-# Object files
-*.o
-*.os
-*.ko
-*.obj
-*.elf
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-*.def
-*.exp
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
+-- Conectar a funÃ§Ã£o de atualizaÃ§Ã£o ao evento Heartbeat
+game:GetService("RunService").Heartbeat:Connect(function()
+    mostrarPosicaoJogadores()
+end)

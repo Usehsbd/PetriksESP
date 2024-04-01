@@ -1,107 +1,148 @@
--- Criar uma GUI (Interface Gráfica do Usuário)
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
 
--- Criar um TextBox para inserir o nome do jogador
+-- Create a GUI (Graphical User Interface)
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Set GUI dimensions
+local guiWidth = 280
+local guiHeight = 200
+
+-- Create a frame for the dark blue background with rounded corners
+local backgroundFrame = Instance.new("Frame")
+backgroundFrame.Size = UDim2.new(0, guiWidth, 0, guiHeight)
+backgroundFrame.Position = UDim2.new(0.02, 0, 0.2, 0) -- Adjusted position to the left corner and center of the screen
+backgroundFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 139) -- Dark blue
+backgroundFrame.BorderSizePixel = 0
+backgroundFrame.Parent = ScreenGui
+
+-- Round the corners of the frame
+local backgroundRound = Instance.new("UICorner")
+backgroundRound.CornerRadius = UDim.new(0.1, 0)
+backgroundRound.Parent = backgroundFrame
+
+-- Create a TextBox to input the player's name
 local textBox = Instance.new("TextBox")
-textBox.PlaceholderText = "Digite o nome do jogador..."
-textBox.Size = UDim2.new(0.2, 0, 0.05, 0)
-textBox.Position = UDim2.new(0.02, 0, 0.02, 0) -- Posição ajustada para cima e à esquerda
+textBox.PlaceholderText = "User here"
+textBox.Size = UDim2.new(0.8, 0, 0.3, 0)
+textBox.Position = UDim2.new(0.1, 0, 0.1, 0)
 textBox.Font = Enum.Font.SourceSans
 textBox.TextSize = 18
-textBox.Parent = ScreenGui
+textBox.Parent = backgroundFrame
+textBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255) -- White
 textBox.BorderSizePixel = 0
-textBox.BackgroundTransparency = 0.5
-textBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255) -- Cor branca
-textBox.TextColor3 = Color3.fromRGB(0, 0, 0) -- Cor preta
+textBox.TextColor3 = Color3.fromRGB(0, 0, 0) -- Black
 textBox.TextScaled = true
 textBox.TextWrapped = true
 textBox.TextXAlignment = Enum.TextXAlignment.Left
 textBox.TextYAlignment = Enum.TextYAlignment.Top
-textBox.ClearTextOnFocus = false
-textBox.ClipsDescendants = true
-textBox.ClearTextOnFocus = true
-textBox.MultiLine = false
-textBox.TextWrapped = false
-textBox.TextStrokeTransparency = 0.9
 
--- Arredondar bordas do TextBox
-local round = Instance.new("UICorner")
-round.CornerRadius = UDim.new(0.5, 0)
-round.Parent = textBox
+-- Round the corners of the TextBox
+local textRound = Instance.new("UICorner")
+textRound.CornerRadius = UDim.new(0.1, 0)
+textRound.Parent = textBox
 
--- Criar um botão para teleportar
-local button = Instance.new("TextButton")
-button.Text = "TP"
-button.Size = UDim2.new(0.1, 0, 0.05, 0)
-button.Position = UDim2.new(0.25, 0, 0.02, 0) -- Posição ajustada para cima e à esquerda
-button.BackgroundColor3 = Color3.fromRGB(30, 144, 255) -- Azul
-button.BorderSizePixel = 0
-button.Font = Enum.Font.SourceSans
-button.TextSize = 18
-button.Parent = ScreenGui
+-- Create a button to teleport
+local teleportButton = Instance.new("TextButton")
+teleportButton.Text = "Teleport"
+teleportButton.Size = UDim2.new(0.4, 0, 0.2, 0)
+teleportButton.Position = UDim2.new(0.1, 0, 0.5, 0)
+teleportButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255) -- White
+teleportButton.BorderSizePixel = 0
+teleportButton.Font = Enum.Font.SourceSans
+teleportButton.TextSize = 18
+teleportButton.Parent = backgroundFrame
 
--- Função para teleportar o jogador voando até o jogador alvo
-local function teleportToPlayer(player)
-    -- Obter o personagem do jogador local
-    local character = game.Players.LocalPlayer.Character
-    if not character then return end
-    
-    -- Obter o personagem do jogador alvo
-    local targetCharacter = player.Character
-    if not targetCharacter then return end
-    
-    -- Obter a parte primária do personagem do jogador alvo
-    local targetPrimaryPart = targetCharacter.PrimaryPart
-    if not targetPrimaryPart then return end
-    
-    -- Calcular a distância inicial entre os dois personagens
-    local initialDistance = (character.PrimaryPart.Position - targetPrimaryPart.Position).magnitude
-    
-    -- Calcular o tempo necessário para alcançar a distância inicial com uma velocidade de 200 studs por segundo
-    local initialTime = initialDistance / 200
-    
-    -- Criar um tweening para suavizar o movimento inicial
-    local initialTweenInfo = TweenInfo.new(initialTime, Enum.EasingStyle.Linear)
-    local initialTween = game.TweenService:Create(character.PrimaryPart, initialTweenInfo, {CFrame = targetPrimaryPart.CFrame})
-    initialTween:Play()
-    
-    -- Loop para verificar continuamente a distância entre os dois personagens e parar o teleporte quando a distância for pequena
-    while true do
-        -- Verificar se o personagem do jogador local e do jogador alvo existem
-        if character and targetCharacter and targetPrimaryPart then
-            -- Atualizar a distância entre os dois personagens
-            local currentDistance = (character.PrimaryPart.Position - targetPrimaryPart.Position).magnitude
-            -- Se a distância for menor que um valor mínimo, parar o teleporte
-            if currentDistance < 5 then
-                break
-            end
+-- Round the corners of the teleport button
+local buttonRound = Instance.new("UICorner")
+buttonRound.CornerRadius = UDim.new(0.1, 0)
+buttonRound.Parent = teleportButton
+
+-- Create a button to stop teleporting
+local stopButton = Instance.new("TextButton")
+stopButton.Text = "Stop"
+stopButton.Size = UDim2.new(0.4, 0, 0.2, 0)
+stopButton.Position = UDim2.new(0.5, 0, 0.5, 0)
+stopButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255) -- White
+stopButton.BorderSizePixel = 0
+stopButton.Font = Enum.Font.SourceSans
+stopButton.TextSize = 18
+stopButton.Parent = backgroundFrame
+
+-- Round the corners of the stop button
+local stopButtonRound = Instance.new("UICorner")
+stopButtonRound.CornerRadius = UDim.new(0.1, 0)
+stopButtonRound.Parent = stopButton
+
+-- Create a text element to display the estimated distance
+local distanceText = Instance.new("TextLabel")
+distanceText.Text = ""
+distanceText.Size = UDim2.new(0.8, 0, 0.2, 0)
+distanceText.Position = UDim2.new(0.1, 0, 0.75, 0)
+distanceText.BackgroundTransparency = 1
+distanceText.Font = Enum.Font.SourceSans
+distanceText.TextSize = 14
+distanceText.TextColor3 = Color3.fromRGB(255, 255, 255) -- White
+distanceText.Parent = backgroundFrame
+
+-- Variables to hold the current tween and connection
+local currentTween
+local connection
+
+-- Function to calculate and update the estimated distance
+local function updateEstimatedDistance(character, targetPosition)
+    local distance = (character.HumanoidRootPart.Position - targetPosition).magnitude
+    distanceText.Text = "Distance to player: " .. math.floor(distance) .. " meters"
+end
+
+-- Function to teleport the player
+local function teleportPlayer(playerName)
+    local player = game.Players:FindFirstChild(playerName)
+    if player then
+        local character = game.Players.LocalPlayer.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            local targetPosition = player.Character.HumanoidRootPart.Position
+            local distance = (character.HumanoidRootPart.Position - targetPosition).magnitude
+            distanceText.Text = "Distance to player: " .. math.floor(distance) .. " meters"
+
+            local tweenInfo = TweenInfo.new(distance / 200, Enum.EasingStyle.Linear)
+            currentTween = TweenService:Create(character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(targetPosition)})
+            currentTween:Play()
+
+            -- Update the estimated distance while the player is moving
+            connection = game:GetService("RunService").Stepped:Connect(function()
+                updateEstimatedDistance(character, targetPosition)
+            end)
         end
-        -- Esperar um curto período de tempo antes de verificar novamente (0.1 segundos)
-        wait(0.1)
+    else
+        distanceText.Text = "Player not found."
     end
 end
 
--- Função para teleportar o jogador quando o botão é clicado
-button.MouseButton1Click:Connect(function()
+-- Teleport button click event
+teleportButton.MouseButton1Click:Connect(function()
     local playerName = textBox.Text
-    
-    -- Verificar se o jogador inseriu um nome
     if playerName ~= "" then
-        -- Tentar encontrar o jogador pelo nome
-        local player = game.Players:FindFirstChild(playerName)
-        if player then
-            -- Teleportar o jogador local voando até o jogador encontrado
-            teleportToPlayer(player)
-        else
-            -- Se o jogador não for encontrado, exibir uma mensagem
-            print("Jogador não encontrado.")
+        if currentTween then
+            currentTween:Cancel()
+            connection:Disconnect()
         end
+        teleportPlayer(playerName)
     else
-        -- Se o campo estiver vazio, exibir uma mensagem
-        print("Por favor, digite um nome de jogador.")
+        distanceText.Text = "Please enter a player name."
     end
 end)
+
+-- Stop button click event
+stopButton.MouseButton1Click:Connect(function()
+    if currentTween then
+        currentTween:Cancel()
+        connection:Disconnect()
+        distanceText.Text = "Teleport stopped."
+    end
+end)
+
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Usehsbd/PetriksESP/main/.gitignore"))()
 -- Função para criar e exibir a interface
 local function showInterface()
